@@ -1,0 +1,43 @@
+#########
+# C/C++ #
+#########
+
+# Binaries
+*
+!*.*
+!*/
+
+# Source files
+*.cpp
+*.c++
+*.c
+
+# Executables
+*.exe
+*.out
+*.app
+
+##########
+# Python #
+##########
+*.py
+
+#######
+# TeX #
+#######
+
+# Source files
+*.tex
+
+# PDFs
+*.pdf
+
+# minted
+_minted*
+*.pyg
+
+###########
+# VS Code #
+###########
+
+.vscode
