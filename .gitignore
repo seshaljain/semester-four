@@ -28,6 +28,7 @@
 
 # Source files
 *.tex
+.auctex-auto
 
 # PDFs
 *.pdf
