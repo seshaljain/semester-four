@@ -1,0 +1,469 @@
+#+title: DBMS Lab Assignment 1
+#+subtitle: Seshal Jain, Scholar Number 191112436, CSE 3
+#+options: h:2 num:nil toc:nil author:nil
+#+date: [2021-01-04 Mon]
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+* Problem 1
+Implement a file-system based database for a school record management system
+#+BEGIN_SRC cpp :tangle l1p1.cpp
+#include <fstream>
+#include <iostream>
+using namespace std;
+
+class Student {
+private:
+  int rollNum;
+  char section;
+  string name;
+
+public:
+  Student() {
+    rollNum = 0;
+    section = 0;
+    name = "";
+  }
+
+  void getData() {
+    cout << "Name: ";
+    cin.ignore();
+    getline(cin, name);
+    cout << "Section: ";
+    cin >> section;
+    cout << "Roll number: ";
+    cin >> rollNum;
+  }
+
+  void display() {
+    cout << "Roll number: " << rollNum << " "
+         << "\n"
+         << "Name: " << name << " "
+         << "\n"
+         << "Section: " << section << "\n";
+  }
+
+  bool writeData();
+  void viewAllRecords();
+  void searchStudent(string);
+  void deleteStudent(int);
+  void updateStudent(int);
+};
+
+void Student::updateStudent(int num) {
+  fstream file;
+
+  file.open("data", ios::in | ios::out | ios::ate | ios::binary);
+  file.seekg(0);
+  file.read((char *)this, sizeof(*this));
+
+  while (!file.eof()) {
+    if (rollNum == num) {
+      getData();
+
+      file.seekp(file.tellp() - sizeof(*this));
+      file.write((char *)this, sizeof(*this));
+    }
+    file.read((char *)this, sizeof(*this));
+  }
+  cout << "Student record not found"
+       << "\n";
+  file.close();
+}
+
+void Student::deleteStudent(int num) {
+  ifstream fin;
+  ofstream fout;
+  fin.open("data", ios::app | ios::binary);
+  if (!fin)
+    cout << "File not found"
+         << "\n";
+  else {
+    fout.open("tempData", ios::app | ios::binary);
+    fin.read((char *)this, sizeof(*this));
+
+    while (!fin.eof()) {
+      if (rollNum != num)
+        fout.write((char *)this, sizeof(*this));
+      fin.read((char *)this, sizeof(*this));
+    }
+    fin.close();
+    fout.close();
+    remove("data");
+    rename("tempData", "data");
+  }
+}
+
+void Student::searchStudent(string Name) {
+  int counter = 0;
+  ifstream fin;
+  fin.open("data", ios::in | ios::binary);
+
+  if (!fin)
+    cout << "File not found"
+         << "\n";
+  else {
+    fin.read((char *)this, sizeof(*this));
+
+    while (!fin.eof()) {
+      if (name == Name) {
+        display();
+        counter++;
+      }
+      fin.read((char *)this, sizeof(*this));
+    }
+    if (counter == 0)
+      cout << "No record found";
+    fin.close();
+  }
+}
+
+void Student::viewAllRecords() {
+  ifstream fin;
+
+  fin.open("data", ios::in | ios::binary);
+  if (!fin)
+    cout << "File not found"
+         << "\n";
+  else {
+    fin.read((char *)this, sizeof(*this));
+
+    while (!fin.eof()) {
+      display();
+      fin.read((char *)this, sizeof(*this));
+    }
+    fin.close();
+  }
+}
+
+bool Student::writeData() {
+  if (rollNum == 0) {
+    cout << "Student data not initialized";
+    return false;
+  } else {
+    ofstream fout;
+
+    fout.open("data", ios::app | ios::binary);
+    fout.write((char *)this, sizeof(*this));
+    fout.close();
+    return true;
+  }
+}
+
+int menu() {
+  int choice;
+
+  cout << "\n--------------------------------\n";
+  cout << "Student Record Management System"
+       << "\n";
+  cout << "1. Insert student record"
+       << "\n";
+  cout << "2. View all records"
+       << "\n";
+  cout << "3. Search student record"
+       << "\n";
+  cout << "4. Delete student record"
+       << "\n";
+  cout << "5. Update student record"
+       << "\n";
+  cout << "6. Exit"
+       << "\n";
+  cout << "\n"
+       << "Enter option: ";
+  cin >> choice;
+  cout << "---------------\n";
+  return choice;
+}
+
+int main() {
+  Student temp;
+  string name = "";
+  int rollNum = 0;
+
+  while (true) {
+    switch (menu()) {
+    case 1:
+      temp.getData();
+      if (temp.writeData()) {
+        cout << "Record inserted"
+             << "\n";
+      } else {
+        cout << "Record insertion failed"
+             << "\n";
+      }
+      break;
+
+    case 2:
+      temp.viewAllRecords();
+      break;
+
+    case 3:
+      cout << "Enter name of student to search: ";
+      cin.ignore();
+      getline(cin, name);
+      temp.searchStudent(name);
+      break;
+
+    case 4:
+      cout << "Enter roll number of student for deletion: ";
+      cin >> rollNum;
+      temp.deleteStudent(rollNum);
+      break;
+
+    case 5:
+      cout << "Enter roll number of student for updation: ";
+      cin >> rollNum;
+      temp.updateStudent(rollNum);
+      break;
+
+    case 6:
+      exit(0);
+
+    default:
+      cout << "Invalid input";
+    }
+  }
+}
+#+END_SRC
+** Output
+#+begin_example
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 2
+---------------
+Roll number: 101
+Name: Sosin Esta
+Section: A
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 4
+---------------
+Enter roll number of student for deletion: 101
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 2
+---------------
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 1
+---------------
+Name: Samjak Lenowski
+Section: A
+Roll number: 101
+Record inserted
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 2
+---------------
+Roll number: 101
+Name: Samjak Lenowski
+Section: A
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 1
+---------------
+Name: Peter Thompson
+Section: B
+Roll number: 102
+Record inserted
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 2
+---------------
+Roll number: 101
+Name: Samjak Lenowski
+Section: A
+Roll number: 102
+Name: Peter Thompson
+Section: B
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 1
+---------------
+Name: Nirmala Vyas
+Section: B
+Roll number: 103
+Record inserted
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 3
+---------------
+Enter name of student to search: Nirmala Vyas
+Roll number: 103
+Name: Nirmala Vyas
+Section: B
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 2
+---------------
+Roll number: 101
+Name: Samjak Lenowski
+Section: A
+Roll number: 102
+Name: Peter Thompson
+Section: B
+Roll number: 103
+Name: Nirmala Vyas
+Section: B
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 1
+---------------
+Name: Tanay Bajaj
+Section: F
+Roll number: 104
+Record inserted
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 5
+---------------
+Enter roll number of student for updation: 104
+Name: Tanay Bajaj
+Section: D
+Roll number: 104
+Student record not found
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 2
+---------------
+Roll number: 101
+Name: Samjak Lenowski
+Section: A
+Roll number: 102
+Name: Peter Thompson
+Section: B
+Roll number: 103
+Name: Nirmala Vyas
+Section: B
+Roll number: 104
+Name: Tanay Bajaj
+Section: D
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 5
+---------------
+Enter roll number of student for updation: 109
+Student record not found
+
+--------------------------------
+Student Record Management System
+1. Insert student record
+2. View all records
+3. Search student record
+4. Delete student record
+5. Update student record
+6. Exit
+
+Enter option: 6
+---------------
+#+end_example
