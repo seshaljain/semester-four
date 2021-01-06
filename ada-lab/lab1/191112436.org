@@ -1,0 +1,211 @@
+#+title: ADA Lab Assignment 1
+#+subtitle: Seshal Jain, Scholar Number 191112436, CSE 3
+#+options: h:2 num:nil toc:nil author:nil
+#+date: [2021-01-06 Wed]
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+* Problem 1
+Implementation of Recursive Binary Search and Linear Search
+** Recursive Binary Search
+#+BEGIN_SRC cpp :tangle l1p1.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int binSearch(int arr[], int low, int high, int key) {
+    if (high < low) return -1;
+
+    int mid = low + (high - low) / 2;
+    if (arr[mid] == key) {
+        return mid;
+    } else if (arr[mid] > key) {
+        return binSearch(arr, low, mid - 1, key);
+    } else {
+        return binSearch(arr, mid + 1, high, key);
+    }
+}
+
+int main() {
+    int n;
+    cout << "Enter size: ";
+    cin >> n;
+
+    int arr[n];
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    int key;
+    cout << "Enter key: ";
+    cin >> key;
+
+    cout << "Key " << key << " found at index " << binSearch(arr, 0, n - 1, key) << "\n";
+    return 0;
+}
+#+END_SRC
+*** Output
+#+begin_example
+Enter size: 100
+8 12 28 30 40 45 50 55 58 64 64 79 92 102 106 117 118 135 138 154 165 167 169 175 183 188 205 215 242 310 312 330 334 335 361 363 372 373 396 407 422 427 430 437 443 482 486 493 499 508 515 524 540 555 567 612 621 624 629 633 643 647 666 668 674 685 689 692 699 702 743 746 757 761 766 786 791 800 802 804 834 843 843 847 851 853 854 861 878 892 902 917 942 960 966 977 978 979 995 997
+Enter key: 106
+Key 106 found at index 15
+#+end_example
+
+The time complexity of Binary Search algorithm is $O(log(n))$ and space complexity is $O(log(n))$ The array provided to the =binSearch= function must be pre-sorted.
+
+Best case complexity is seen when search key is at midpoint index. In this case time complexity is $O(1)$
+Worst case complexity is seen when search key is at either extreme index. In this case time complexity is $O(n)$
+** Linear Search
+#+BEGIN_SRC cpp :tangle l1p2.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int search(int arr[], int n, int x)
+{
+    int i;
+    for (i = 0; i < n; i++)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}
+
+int main()
+{
+    cout << "Enter size: ";
+    int n;
+    cin >> n;
+    int arr[n];
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    cout << "Enter key: ";
+    int x;
+    cin >> x;
+
+    int index = search(arr, n, x);
+    if (index == -1)
+        cout << "Element is not present in the array";
+    else
+        cout << "Element found at position " << index;
+
+    return 0;
+}
+#+END_SRC
+*** Output
+#+begin_example
+Enter size: 100
+8 12 28 30 40 45 50 55 58 64 64 79 92 102 106 117 118 135 138 154 165 167 169 175 183 188 205 215 242 310 312 330 334 335 361 363 372 373 396 407 422 427 430 437 443 482 486 493 499 508 515 524 540 555 567 612 621 624 629 633 643 647 666 668 674 685 689 692 699 702 743 746 757 761 766 786 791 800 802 804 834 843 843 847 851 853 854 861 878 892 902 917 942 960 966 977 978 979 995 997
+Enter key: 55
+Key 55 found at index 7
+#+end_example
+
+The time complexity of Linear Search algorithm is $O(n)$ and space complexity is $O(1)$ The array provided to the =search= function need not be pre-sorted.
+
+Best case complexity is seen when search key is at 1st index. In this case time complexity is $O(1)$
+Worst case complexity is seen when search key is at last index. This this case time complexity is $O(n)$
+* Problem 2
+Program to check if a matrix is a sparx matrix
+#+BEGIN_SRC cpp :tangle l1p3.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int m, n;
+  cout << "Enter rows and columns: ";
+  cin >> m >> n;
+
+  int nonZeroElem = 0;
+
+  int mat[m][n];
+  cout << "Enter matrix elements"
+       << "\n";
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      cin >> mat[i][j];
+    }
+  }
+
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (mat[i][j] != 0)
+        nonZeroElem++;
+    }
+  }
+
+  if (nonZeroElem < (m * n) / 2) {
+    cout << "Matrix is a sparse matrix"
+         << "\n";
+  } else {
+    cout << "Matrix is not a sparse matrix"
+         << "\n";
+  }
+
+  return 0;
+}
+#+END_SRC
+** Output
+#+begin_example
+Enter rows and columns: 4 5
+Enter matrix elements
+0 0 3 0 4
+0 0 5 7 0
+0 0 0 0 0
+0 2 6 0 0
+Matrix is a sparse matrix
+#+end_example
+
+The time complexity of this program is $O(n^2)$ and space complexity is $O(1)$
+
+Sparse matrices can be stored in multiple formats, for example in Linked List representation or in 2D Array representation.
+We don't need to store the 0 values, but rather the indices of data values. So it is much more efficient in terms of space.
+* Problem 3
+#+BEGIN_SRC cpp :tangle l1p4.cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cout << "Enter the size of array: ";
+    cin >> n;
+    int arr[n];
+    cout << "Enter array elements: ";
+
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    bool b = true;
+    for (int i = 0; i < n && b; i++) {
+        b = false;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[i]) {
+                swap(arr[i], arr[j]);
+                b = !b;
+            }
+        }
+    }
+
+    cout << "The sorted array is: ";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+
+    cout << "\n";
+}
+#+END_SRC
+
+The time complexity of Bubble Sort algorithm is $O(n^2)$ and the space complexity is $O(1)$
+
+For a given element, if no swaps are peformed, the array is already sorted.
+This, an improved version of this algorithm is:
+#+BEGIN_SRC cpp
+bool b= true
+for(int i = 0; i < n && b; i++) {
+    b = false;
+    for(int j = i + 1; j < n; j++) {
+        if(arr[j] < arr[i]) {
+            swap(arr[i], arr[j]);
+            b = !b;
+        }
+    }
+}
+#+END_SRC
+The best case complexity (i.e. when array is already sorted) will be O(n)
