@@ -1,0 +1,41 @@
+#+title: DBMS Lab Assignment 2
+#+subtitle: Seshal Jain, Scholar Number 191112436, CSE 3
+#+options: h:2 num:nil toc:nil author:nil
+#+date: [2021-01-11 Mon]
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+* Create Schema
+#+BEGIN_SRC sql
+CREATE DATABASE `191112436`;
+#+END_SRC
+[[./create-schema.png]]
+* Create Table
+#+BEGIN_SRC sql
+CREATE TABLE Student (
+    sch_no int(20),
+    first_name varchar(20),
+    middle_name varchar(20),
+    last_name varchar(20),
+    branch varchar(20),
+    address varchar(40),
+    city varchar(20),
+    state varchar(20),
+    pincode int(20)
+);
+#+END_SRC
+[[./create-table.png]]
+* Insert Values
+#+BEGIN_SRC sql
+INSERT INTO Student VALUES (
+    191112436,
+    'Seshal',
+    'S',
+    'Jain',
+    'CSE',
+    'Race Course Road',
+    'Indore',
+    'Madhya Pradesh',
+    452003
+);
+#+END_SRC
+[[./insert-values.png]]
