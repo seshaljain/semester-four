@@ -1,0 +1,69 @@
+#+title: DBMS Lab Assignment 3
+#+subtitle: Seshal Jain, Scholar Number 191112436, CSE 3
+#+options: h:2 num:nil toc:nil author:nil
+#+date: [2021-01-18 Mon]
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+* Insert Values
+Use database 191112436
+#+BEGIN_SRC sql
+USE `191112436`;
+#+END_SRC
+Insert dummy generated values
+#+BEGIN_SRC sql
+INSERT INTO Student VALUES (191112301, 'Seshal', 'Suresh', 'Jain', 'Computer Science', '64262 Bashford Hill', 'Tucson', 'Arizona', '85720');
+INSERT INTO Student VALUES (191112473, 'Lewes', 'Zeke', 'Brealey', 'Mechanical', '3 Hagan Alley', 'Lexington', 'Kentucky', '40586');
+INSERT INTO Student VALUES (191112101, 'Lissie', 'Vail', 'Elt', 'Civil', '1 Park Meadow Park', 'Knoxville', 'Tennessee', '37914');
+INSERT INTO Student VALUES (191112366, 'Mirabella', 'Loren', 'Cudde', 'Civil', '7 Artisan Court', 'Shreveport', 'Louisiana', '71151');
+INSERT INTO Student VALUES (191112097, 'Sayers', 'Kendal', 'Legges', 'Civil', '71 5th Crossing', 'Indianapolis', 'Indiana', '46231');
+INSERT INTO Student VALUES (191112178, 'Velvet', 'Basilio', 'Coomber', 'Mechanical', '836 Tony Plaza', 'Irvine', 'California', '92619');
+INSERT INTO Student VALUES (191112024, 'Lyssa', 'Isaak', 'Egdale', 'Civil', '956 Stephen Park', 'Huntsville', 'Alabama', '35895');
+INSERT INTO Student VALUES (191112197, 'Lorri', 'Emmit', 'Sinclaire', 'Civil', '84851 Village Avenue', 'Fresno', 'California', '93750');
+INSERT INTO Student VALUES (191112573, 'Evvy', 'Colet', 'Colrein', 'Electronics', '03 Lindbergh Road', 'Akron', 'Ohio', '44310');
+INSERT INTO Student VALUES (191112116, 'Cordie', 'Hillie', 'McGahy', 'Computer Science', '1183 Bunting Crossing', 'Lexington', 'Kentucky', '40591');
+INSERT INTO Student VALUES (191112003, 'Sabrina', 'Reggy', 'Evill', 'Electronics', '26729 Gale Trail', 'Indianapolis', 'Indiana', '46247');
+INSERT INTO Student VALUES (191112571, 'Gerome', 'Neddy', 'Faircliff', 'Civil', '4566 Butternut Alley', 'Knoxville', 'Tennessee', '37924');
+INSERT INTO Student VALUES (191112199, 'Andy', 'North', 'Brounsell', 'Civil', '27 Sherman Park', 'Gainesville', 'Florida', '32627');
+INSERT INTO Student VALUES (191112381, 'Spencer', 'Onfroi', 'Koppe', 'Electronics', '81 Waxwing Alley', 'Houston', 'Texas', '77293');
+INSERT INTO Student VALUES (191112239, 'Trixie', 'Haydon', 'Mustoo', 'Civil', '018 Walton Parkway', 'Lancaster', 'Pennsylvania', '17622');
+INSERT INTO Student VALUES (191112541, 'Wynny', 'Dino', 'Olney', 'Civil', '6 Summerview Street', 'Brea', 'California', '92822');
+INSERT INTO Student VALUES (191112005, 'Rachele', 'Iosep', 'Conrart', 'Electronics', '179 Farragut Park', 'Columbia', 'South Carolina', '29220');
+INSERT INTO Student VALUES (191112082, 'Quinton', 'Tanny', 'Missington', 'Civil', '08983 Hagan Street', 'Bozeman', 'Montana', '59771');
+INSERT INTO Student VALUES (191112468, 'Ambrosio', 'Drew', 'Larwood', 'Civil', '686 Scoville Center', 'Cincinnati', 'Ohio', '45243');
+INSERT INTO Student VALUES (191112137, 'Cordell', 'Baron', 'Maddern', 'Civil', '0 Meadow Valley Drive', 'Reading', 'Pennsylvania', '19605');
+INSERT INTO Student VALUES (191112487, 'Fransisco', 'Spenser', 'Gagen', 'Mechanical', '2905 Stoughton Avenue', 'Los Angeles', 'California', '90081');
+#+END_SRC
+[[./fig1.png]]
+* Create =RollList= from =Student=
+#+BEGIN_SRC sql
+CREATE TABLE RollList AS SELECT sch_no, first_name, middle_name, last_name FROM Student;
+#+END_SRC
+[[./fig2.png]]
+* Create =CSE= from =Student=
+Constraint: =branch= = ="Computer Science"=
+#+BEGIN_SRC sql
+CREATE TABLE CSE AS SELECT sch_no, first_name, middle_name, last_name FROM Student WHERE branch='Computer Science';
+#+END_SRC
+** Add =email= attribute to =CSE=
+Add attribute =email=
+#+BEGIN_SRC sql
+ALTER TABLE CSE ADD email varchar(40);
+#+END_SRC
+Modify =email=
+#+BEGIN_SRC sql
+ALTER TABLE CSE MODIFY email varchar(50);
+#+END_SRC
+Remove =email=
+#+BEGIN_SRC sql
+ALTER TABLE CSE DROP COLUMN email;
+#+END_SRC
+** Delete all data from =CSE=
+#+BEGIN_SRC sql
+DELETE FROM CSE;
+#+END_SRC
+[[./fig3.png]]
+** Delete table =CSE=
+#+BEGIN_SRC sql
+DROP TABLE CSE;
+#+END_SRC
+[[./fig4.png]]
