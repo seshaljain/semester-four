@@ -1,0 +1,127 @@
+#+title: ADA Lab Assignment 2
+#+subtitle: Seshal Jain, Scholar Number 191112436, CSE 3
+#+options: h:2 num:nil toc:nil author:nil
+#+date: [2021-01-20 Wed]
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+
+Write programs for implementing the following sorting techniques to arrange a
+list of integers in ascending order. Also, analyze the time complexity:
+a) Quick Sort
+b) Merge Sort
+
+* Quick Sort
+#+BEGIN_SRC cpp
+#include <iostream>
+using namespace std;
+int partition(int arr[], int l, int r) {
+  int pivot = arr[r];
+  int i = l - 1;
+  for (int j = l; j < r; j++) {
+    if (arr[j] < pivot) {
+      i++;
+      swap(arr[i], arr[j]);
+    }
+  }
+  swap(arr[i + 1], arr[r]);
+  return i + 1;
+}
+
+void quicksort(int arr[], int l, int r) {
+  if (l < r) {
+    int pi = partition(arr, l, r);
+    quicksort(arr, l, pi - 1);
+    quicksort(arr, pi + 1, r);
+  }
+}
+
+int main() {
+  int arr[] = {16, 21, 3,  32, 32, 25, 31, 30, 39, 36,
+               25, 13, 34, 4,  10, 2,  18, 0,  25, 39};
+  int n = sizeof(arr) / sizeof(arr[0]);
+
+  quicksort(arr, 0, n - 1);
+  for (int i = 0; i < n; i++) {
+    cout << arr[i] << " ";
+  }
+  cout << endl;
+}
+#+END_SRC
+
+#+RESULTS:
+: 0 2 3 4 10 13 16 18 21 25 25 25 30 31 32 32 34 36 39 39
+** Output
+#+BEGIN_EXAMPLE
+0 2 3 4 10 13 16 18 21 25 25 25 30 31 32 32 34 36 39 39
+#+END_EXAMPLE
+** Analysis
+Quick sort is a Divide and Conquer algorithm used for efficient sorting of values. It works by selecting an element as the pivot, and moving all elements less than this element to the left, and all elements more than this element to the right.
+Essentially the algorithm moves elements to their correct positions and the divides the array in /partitions/ to divide and conquer the sorting process.
+
+- In the *best case*, the pivot element is already in the correct place, and the partition are equal. This creates $\log_2(n)$ levels. Thus, the time complexity is $n$ elements $\times$ $\log_2 n$ levels, yielding $O(n \log n)$.
+- In the *worst case*, the pivot element is the maximal (or the minimal) element. This yields $n$ levels of paritions, this the time complexity is $O(n^2)$
+- In the average case the time complexity is $O(n \log n)$
+* Merge sort
+#+BEGIN_SRC cpp
+#include <iostream>
+using namespace std;
+
+void mergeArr(int arr[], int left, int mid, int right) {
+  int temp[right - left + 1];
+  int i = left, j = mid + 1;
+  int k = 0;
+
+  while (i <= mid && j <= right) {
+    if (arr[i] < arr[j])
+      temp[k++] = arr[i++];
+    else
+      temp[k++] = arr[j++];
+  }
+
+  while (i <= mid)
+    temp[k++] = arr[i++];
+  while (j <= right)
+    temp[k++] = arr[j++];
+  for (int i = left; i <= right; i++)
+    arr[i] = temp[i - left];
+}
+
+void mergeSort(int arr[], int left, int right) {
+  int mid;
+
+  if (left < right) {
+    mid = left + (right - left) / 2;
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+    mergeArr(arr, left, mid, right);
+  }
+}
+
+int main() {
+  int arr[] = {16, 21, 3,  32, 32, 25, 31, 30, 39, 36,
+               25, 13, 34, 4,  10, 2,  18, 0,  25, 39};
+  int n = sizeof(arr) / sizeof(arr[0]);
+
+  mergeSort(arr, 0, n - 1);
+
+  for (int i = 0; i < n; i++) {
+    cout << arr[i] << " ";
+  }
+  cout << endl;
+}
+#+END_SRC
+
+#+RESULTS:
+: 0 2 3 4 10 13 16 18 21 25 25 25 30 31 32 32 34 36 39 39
+
+** Output
+#+BEGIN_EXAMPLE
+0 2 3 4 10 13 16 18 21 25 25 25 30 31 32 32 34 36 39 39
+#+END_EXAMPLE
+** Analysis
+*Merge sort* is another divide and conquer technique. We divide an array into halves, and merge these halves iteratively according to their elements.
+
+
+It is a recursive algorithm expressed by the recursive relation $T(n) = 2T(n/2) + \Theta(n)$.
+
+
+Since the array is always divided in equal halves, Merge Sort gives equal /best-case/, /worst-case/ & /average-case/ time complexity of $O(n \log n)$.
