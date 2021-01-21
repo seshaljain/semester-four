@@ -1,0 +1,61 @@
+#+TITLE: PHP Lab Assignment
+#+SUBTITLE: Seshal Jain, Scholar Number 191112436, CSE 3
+#+OPTIONS: h:2 num:nil toc:nil author:nil
+#+DATE: [2021-01-21 Thu]
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+#+EXPORT_FILE_NAME: 191112436
+
+To generate a POST form powered by PHP, we need the HTML form and a PHP form handler.
+
+*Directory structure*
+#+begin_example
+src
+|-- formHandler.php
+`-- index.php
+#+end_example
+
+=index.php=
+#+BEGIN_SRC html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+</head>
+<body>
+    <form action="formHandler.php" method="post">
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name"><br>
+        <label for="sch_no">Scholar Number: </label>
+        <input type="text" name="sch_no" id="sch_no"><br>
+        <label for="email">Email: </label>
+        <input type="email" name="email" id="email" placeholder="dummy@example.com">
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+#+END_SRC
+
+=formHandler.php=
+#+BEGIN_SRC html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website</title>
+</head>
+<body>
+    <h2>Welcome <?php echo $_POST["name"]; ?></h2>
+    <p>Your scholar number is: <?php echo $_POST["sch_no"]; ?></p>
+    <p>Your email address is: <?php echo $_POST["email"]; ?></p>
+</body>
+</html>
+#+END_SRC
+
+The PHP *Super Global Variable* =_POST= contains an array of the form data sent with the =POST= request from the HTML form.
+
+[[./html-form.png]]
+
+[[./user-info.png]]
