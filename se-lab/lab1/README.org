@@ -1,6 +1,9 @@
-#+TITLE:     3 Word URL
-#+AUTHOR:    Seshal Jain
-#+EMAIL:     seshaljain11@gmail.com
+#+TITLE: Software Engineering Lab Assignment 1
+#+SUBTITLE: Seshal Jain, Scholar Number 191112436, CSE 3
+#+OPTIONS: h:2 num:nil toc:nil author:nil
+#+DATE: [2021-01-22 Fri]
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+#+EXPORT_FILE_NAME: 191112436
 
 * Introduction
 Three Word URL generates short and easy to read URLs to share on the go, with the option to choose the lifetime of the URL while generating it.

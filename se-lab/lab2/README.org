@@ -1,0 +1,38 @@
+#+TITLE: Software Engineering Lab Assignment 2
+#+SUBTITLE: Seshal Jain, Scholar Number 191112436, CSE 3
+#+OPTIONS: h:2 num:nil toc:nil author:nil
+#+DATE: [2021-01-22 Fri]
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+#+EXPORT_FILE_NAME: 191112436
+
+* Types of SRS Diagrams:
+** Activity Diagram
+Activity diagrams are graphical representations of workflows of stepwise
+activities and actions, showing choices for organizational processes. They are a
+form of structured flowchart combined with a traditional data flow diagram.
+** Sequence Diagram
+Sequence diagrams are interaction diagrams and depict how the operations are
+carried out.These diagrams are time focused since they describe the order of
+interaction by using the vertical axis.The vertical axis represents the time at
+which the messages may be sent or received.
+** Use Case Diagram
+Use case Diagrams (or behaviour diagrams) describe the set of operations that
+some system can perform in collaboration with one or more external users of the
+system. The use case diagram may be used to gather system requirements or get an
+overview of a system.It identifies the external and internal factors that
+influence the system and also shows the interaction among the requirements.
+** Data Flow Diagram
+DFD is a way of representing the flow of data through a process and the inputs
+and outputs of each entity of the process. It consists of processes, flows,
+warehouses, and terminators.  The process part of a system that transforms
+inputs to outputs.  The flow shows the transfer of information from one part of
+the system to another.  The warehouse is used to store data for later use.  The
+terminator is an external entity that communicates with the system and stands
+outside of the system.
+** ER Diagram
+Entity-relationship model is used to describe interrelated things of interest in
+a particular topic. A basic ER model is composed of entity types and specifies
+relationships that can exist between entities. We draw ER diagrams to visualize
+database design ideas etc. By drawing ER diagrams to visualize database design
+ideas, we can identify the mistakes and design flaws, and make corrections
+before executing the changes in the data.
