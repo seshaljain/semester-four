@@ -1,0 +1,97 @@
+#+TITLE: Software Engineering Lab
+#+SUBTITLE: CSE-229
+#+AUTHOR: Seshal Jain
+#+DATE: January 29, 2021
+#+EXPORT_FILE_NAME: 191112436
+#+LATEX_CLASS: assignment
+
+* Software Requirement Specification --- 3 Word URL
+** Introduction
+Three Word URL generates short and easy to read URLs to share on the go, with
+the option to choose the lifetime of the URL while generating it.
+** Description
+The software provides a platform for the user to generate URLs for sharing. The
+generated URLs are in the form of website routes made from 3 easy to remember
+English words, which redirect the user to the original website. The words used
+can be shared verbally, and thus are easier to remember. The project has the
+added advantage of having an easy way to shorten complicated URLs
+temporarily, this is extremely useful for teams for sharing resources at short
+notice.
+** Clients
+Individuals or Development teams working on projects who need to share URLs.
+** Feasibility
+*** Technical Feasibility
+Possible frameworks that can be used
+1. Python based Django
+2. Python based Flask
+3. Node.js based ExpressJS
+Based on the developer availability, our best option is to go with Python based
+Django.
+*** Operational Feasibility
+After the deployment of the project on the server, no maintenance is required
+for the project. There may be some downtime when the server on which the project
+is running goes down.
+*** Economic Feasibility
+The major costs associated with this project after development are the hosting
+and maintenance costs. The capital required for covering costs of hosting may be
+generated from showing non-intrusive advertisements on the redirection page.
+** Requirements
+*** Functional Requirements
+1. The ability to generate short urls that are easy to read.
+2. Proper redirection, with minimum to no downtime.
+3. Fast response and redirection.
+4. Ability to handle non-existing and invalid urls.
+*** Non Functional Requirements
+1. Security - The data shouldn’t be easily breached and data shouldn’t be corrupted and url lifetime scope shouldn’t be able to be changed by unauthorized people.
+2. Maintenance - The project itself doesn’t require management after the deployment, however the server may require regular maintenance.
+** Goals and Scopes
+1. Users should be able to generate a 3-word-URL for the required links.
+2. Users should have the option to choose the validity duration for the generated URL.
+3. Users must be able to generate URLs for even non existent websites.
+** Developer Responsibility
+The developer team will take the responsibility of the project.
+** Platform
+1. Website
+2. Progressive Web App for installation on phone
+** Deliverables
+The development team will deliver the following after the course of development:
+1. Feature Specification
+2. Test Plan for the project
+3. Product design and structure
+4. A thorough report of the project
+5. Source Code
+** Risk Management: (Identification and Mitigation)
+1. In case of database failure, the URLs and routes may be lost.
+2. This can be resolved via timed backups and regular DBMS checkups.
+
+* Types of SRS Diagrams
+** Activity Diagram
+Activity diagrams are graphical representations of workflows of stepwise
+activities and actions, showing choices for organizational processes. They are a
+form of structured flowchart combined with a traditional data flow diagram.
+** Sequence Diagram
+Sequence diagrams are interaction diagrams and depict how the operations are
+carried out.These diagrams are time focused since they describe the order of
+interaction by using the vertical axis.The vertical axis represents the time at
+which the messages may be sent or received.
+** Use Case Diagram
+Use case Diagrams (or behavior diagrams) describe the set of operations that
+some system can perform in collaboration with one or more external users of the
+system. The use case diagram may be used to gather system requirements or get an
+overview of a system.It identifies the external and internal factors that
+influence the system and also shows the interaction among the requirements.
+** Data Flow Diagram
+DFD is a way of representing the flow of data through a process and the inputs
+and outputs of each entity of the process. It consists of processes, flows,
+warehouses, and terminators. The process part of a system that transforms inputs
+to outputs. The flow shows the transfer of information from one part of the
+system to another. The warehouse is used to store data for later use. The
+terminator is an external entity that communicates with the system and stands
+outside of the system.
+** ER Diagram
+Entity-relationship model is used to describe interrelated things of interest in
+a particular topic. A basic ER model is composed of entity types and specifies
+relationships that can exist between entities. We draw ER diagrams to visualize
+database design ideas etc. By drawing ER diagrams to visualize database design
+ideas, we can identify the mistakes and design flaws, and make corrections
+before executing the changes in the data.
