@@ -41,6 +41,10 @@ _minted*
 ###########
 #  Java   #
 ###########
+*.java 
+
+# Source files
+src/
 
 # Compiled class file
 *.class
