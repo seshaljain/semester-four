@@ -1,0 +1,205 @@
+#+TITLE: Java Lab 1
+#+SUBTITLE: CSE-230
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: February 04, 2021
+#+LATEX_CLASS: assignment
+#+EXPORT_FILE_NAME: 191112436
+
+* Program 1
+**Write a JAVA program to calculate the factorial of a number, input should be
+  given though the command line argument.**
+#+begin_src java
+public class Factorial {
+  public static void main(String[] args) {
+    System.out.println(calculate(Integer.parseInt(args[0])));
+  }
+  static int calculate(int num) {
+    if (num == 0) {
+      return 1;
+    } else {
+      return num * calculate(num - 1);
+    }
+  }
+}
+#+end_src
+** Output
+#+begin_example
+$ javac Factorial.java
+$ java Factorial 5
+120
+#+end_example
+* Program 2
+**Write a JAVA program to initialize and display the attribute values of a class
+=Vehicle=. It should be initialized using a constructor.**
+#+begin_src java
+public class Vehicle {
+  String vehicle_type, vehicle_number, vehicle_model, vehicle_color;
+  long price, reg_number;
+  public Vehicle(String vehicle_type, String vehicle_number,
+                 String vehicle_model, String vehicle_color, long price,
+                 long reg_number) {
+    this.vehicle_type = vehicle_type;
+    this.vehicle_number = vehicle_number;
+    this.vehicle_model = vehicle_model;
+    this.vehicle_color = vehicle_color;
+    this.price = price;
+    this.reg_number = reg_number;
+  }
+  void display() {
+    System.out.println("Vehicle type: " + vehicle_type);
+    System.out.println("Vehicle number: " + vehicle_number);
+    System.out.println("Vehicle model: " + vehicle_model);
+    System.out.println("Vehicle color: " + vehicle_color);
+    System.out.println("Vehicle price: " + price);
+    System.out.println("Registration number: " + reg_number);
+  }
+  public static void main(String[] args) {
+    Vehicle v =
+        new Vehicle("Bus", "JK-R0FL", "M43ER4T1", "Pink", 4206969, 3141592);
+    v.display();
+  }
+}
+#+end_src
+** Output
+#+begin_example
+$ javac Vehicle.java
+$ java Vehicle
+Vehicle type: Bus
+Vehicle number: JK-R0FL
+Vehicle model: M43ER4T1
+Vehicle color: Pink
+Vehicle price: 4206969
+Registration number: 3141592
+#+end_example
+* Program 3
+**Create an interface =Vehicle= and implement the methods of the interface in
+class =Bike= to get and display the attribute values.**
+#+begin_src java
+public interface Vehicle_ {
+  public void modelDetails();
+  public void priceDetails();
+}
+#+end_src
+
+#+begin_src java
+public class Bike implements Vehicle_ {
+  String vehicle_number, vehicle_model, color;
+  long price, reg_number;
+  public Bike(String vehicle_number, String vehicle_model, String color,
+              long price, long reg_number) {
+    this.vehicle_number = vehicle_number;
+    this.vehicle_model = vehicle_model;
+    this.color = color;
+    this.price = price;
+    this.reg_number = reg_number;
+  }
+
+  public void modelDetails() {
+    System.out.println("Vehicle number: " + vehicle_number);
+    System.out.println("Vehicle model: " + vehicle_model);
+    System.out.println("Vehicle color: " + color);
+  }
+
+  public void priceDetails() {
+    System.out.println("Price: " + price);
+    System.out.println("Registration number: " + reg_number);
+  }
+
+  public static void main() {
+    Bike b = new Bike("JK-R0FL", "M43ER4T1", "Pink", 4206969, 3141592);
+    b.modelDetails();
+    b.priceDetails();
+  }
+}
+#+end_src
+** Output
+#+begin_example
+$ javac Bike.java
+$ java Bike
+Vehicle number: JK-R0FL
+Vehicle model: M43ER4T1
+Vehicle color: Pink
+Price: 4206969
+Registration number: 3141592
+#+end_example
+* Program 4
+**Write a JAVA program, in which create a =Sportsman= class that inherits the class =Person= to initialize the basic attributes of a =Sportsman= object.**
+#+begin_src java
+public class Person {
+  String name;
+  double height, weight;
+  int age;
+  public Person() {
+    name = "";
+    height = 0;
+    weight = 0;
+    age = 0;
+  }
+  public Person(String name, double height, double weight, int age) {
+    this.name = name;
+    this.height = height;
+    this.weight = weight;
+    this.age = age;
+  }
+  public void display() {
+    System.out.println("Name: " + name);
+    System.out.println("Height: " + height);
+    System.out.println("Weight: " + weight);
+    System.out.println("Age: " + age);
+  }
+}
+#+end_src
+
+#+begin_src java
+public class Sportsman extends Person {
+  String sport;
+  char gender;
+  public Sportsman(String name, double height, double weight, int age,
+                   String sport, char gender) {
+    super(name, height, weight, age);
+    this.sport = sport;
+    this.gender = gender;
+  }
+  public void display() {
+    super.display();
+    System.out.println("Sport: " + sport);
+    System.out.println("Gender: " + gender);
+  }
+  public static void main(String[] args) {
+    Sportsman s = new Sportsman("D'souza", 179, 68.4, 39, "Football", 'M');
+    s.display();
+  }
+}
+#+end_src
+** Output
+#+begin_example
+$ javac Sportsman.java
+$ java Sportsman
+Name: D'souza
+Height: 179.0
+Weight: 68.4
+Age: 39
+Sport: Football
+Gender: M
+#+end_example
+* Program 5
+**Create a JAVA program to perform method overloading to perform addition of float and integer numbers.**
+#+begin_src java
+public class Overloading {
+  public int add(int x, int y) { return x + y; }
+  public float add(float x, float y) { return x + y; }
+  public static void main(String[] args) {
+    Overloading o = new Overloading();
+    System.out.println("Sum of 7 and 5 is: " + o.add(7, 5));
+    System.out.println("Sum of 7.3 and 5.2 is: " + o.add(7.3f, 5.2f));
+  }
+}
+#+end_src
+** Output
+#+begin_example
+$ javac Overloading.java
+$ java Overloading
+Sum of 7 and 5 is: 12
+Sum of 7.3 and 5.2 is: 12.5
+#+end_example
