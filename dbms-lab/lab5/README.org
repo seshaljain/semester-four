@@ -1,0 +1,50 @@
+#+TITLE: DBMS Lab 5
+#+SUBTITLE: Company Database Queries
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: February 15, 2021
+#+LATEX_CLASS: assignment
+#+EXPORT_FILE_NAME: 191112436
+
+* Query 1
+** Get the name of employees who earn a salary of more than $30000
+#+begin_src sql
+SELECT Fname, Minit, Lname FROM EMPLOYEE WHERE SALARY >= 30000;
+#+end_src
+[[./img/fig-1.png]]
+
+* Query 2
+** Get the name of the employee whose last name begins with =W=
+#+begin_src sql
+SELECT Fname, Minit, Lname FROM EMPLOYEE WHERE Lname LIKE "W%";
+#+end_src
+[[./img/fig-2.png]]
+
+* Query 3
+** If the Company wants to give increment to those employees who earn less than or equal to 25000$ by 10%, then get the incremented amount of salary
+#+begin_src sql
+SELECT Salary*0.1 FROM EMPLOYEE WHERE SALARY <= 25000;
+#+end_src
+[[./img/fig-3.png]]
+
+* Query 4
+** Get the department number whose belongs to a location that name end with =D=
+#+begin_src sql
+SELECT Dnumber FROM DEPT_LOCATIONS WHERE Dlocation LIKE "%D";
+#+end_src
+[[./img/fig-4.png]]
+
+* Query 5
+** Get the detail of employee in sorted form according to their salary in increasing order
+#+begin_src sql
+SELECT * FROM EMPLOYEE ORDER BY SALARY ASC;
+#+end_src
+[[./img/fig-5.png]]
+
+* Query 6
+** Get the details of employee who works in the headquarters or research department /(By using =IN= clause)/
+#+begin_src sql
+SELECT EMPLOYEE.* FROM EMPLOYEE, DEPARTMENT
+    WHERE Dno=Dnumber AND Dname IN ('Research', 'Headquarters');
+#+end_src
+[[./img/fig-6.png]]
