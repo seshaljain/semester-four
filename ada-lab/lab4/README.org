@@ -1,0 +1,168 @@
+#+TITLE: Analysis and Design of Algorithms
+#+SUBTITLE: Lab 4
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: February 17, 2021
+#+LATEX_CLASS: assignment
+#+EXPORT_FILE_NAME: 191112436
+
+* Problem 1
+Find the maximum and minimum value of an array using a divide and conquer approach.
+#+begin_src cpp :tangle l4p1.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int findMin(int arr[], int l, int h) {
+  if (h - l + 1 == 1) {
+    return arr[l];
+  } else if (h - l + 1 == 2) {
+    return ((arr[l] < arr[h]) ? arr[l] : arr[h]);
+  } else {
+    int minLeft = findMin(arr, l, l + (h - l + 1) / 2);
+    int minRight = findMin(arr, l + (h - l + 1) / 2, h);
+
+    return ((minLeft < minRight) ? minLeft : minRight);
+  }
+}
+
+int findMax(int arr[], int l, int h) {
+  if (h - l + 1 == 1) {
+    return arr[h];
+  } else if (h - l + 1 == 2) {
+    return ((arr[h] > arr[l]) ? arr[h] : arr[l]);
+  } else {
+    int maxLeft = findMax(arr, l, l + (h - l + 1) / 2);
+    int maxRight = findMax(arr, l + (h - l + 1) / 2, h);
+
+    return ((maxLeft > maxRight) ? maxLeft : maxRight);
+  }
+}
+
+int main() {
+  int arr[10] = {37, 50, 37, 7, 3, 92, 65, 88, 35, 73};
+
+  int minNum = findMin(arr, 0, 9);
+  int maxNum = findMax(arr, 0, 9);
+
+  cout << "Array: ";
+  for (auto it : arr) {
+    cout << it << " ";
+  }
+  cout << "\n";
+  cout << "Minimum: " << minNum << "\n";
+  cout << "Maximum: " << maxNum << "\n";
+}
+#+end_src
+
+#+RESULTS:
+| Array:   | 37 | 50 | 37 | 7 | 3 | 92 | 65 | 88 | 35 | 73 |
+| Minimum: |  3 |    |    |   |   |    |    |    |    |    |
+| Maximum: | 92 |    |    |   |   |    |    |    |    |    |
+
+** Output
+#+begin_example
+$ ./l4p1
+Array: 37 50 37 7 3 92 65 88 35 73
+Minimum: 3
+Maximum: 92
+#+end_example
+
+* Problem 2
+Compute the sum of an array of integers using a divide and conquer approach.
+#+begin_src cpp :tangle l4p2.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int findSum(int arr[], int n) {
+  if (n == 0)
+    return 0;
+  if (n == 1)
+    return arr[0];
+  int mid = n / 2;
+  int leftSum = findSum(arr, mid);
+  int rightSum = findSum(arr + mid, n - mid);
+  return leftSum + rightSum;
+}
+
+int main() {
+  int arr[10] = {37, 50, 37, 7, 3, 92, 65, 88, 35, 73};
+  int sum = findSum(arr, 10);
+
+  cout << "Array: ";
+  for (auto it : arr) {
+    cout << it << " ";
+  }
+  cout << "\n";
+  cout << "Sum: " << sum << "\n";
+}
+#+end_src
+
+#+RESULTS:
+| Array: |  37 | 50 | 37 | 7 | 3 | 92 | 65 | 88 | 35 | 73 |
+| Sum:   | 487 |    |    |   |   |    |    |    |    |    |
+
+** Output
+#+begin_example
+$ ./l4p2
+Array: 37 50 37 7 3 92 65 88 35 73
+Sum: 487
+#+end_example
+
+* Problem 3
+What is a recursive Quick Sort? Write an algorithm and analyze the time complexity of this algorithm.
+#+begin_src cpp :tangle l4p3.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int partition(int arr[], int left, int right) {
+  int pivot = arr[right];
+  int ctr = left - 1;
+  for (int i = left; i <= right; i++) {
+    if (arr[i] < pivot)
+      swap(arr[i], arr[++ctr]);
+  }
+  swap(arr[++ctr], arr[right]);
+  return ctr;
+}
+
+void quickSort(int arr[], int left, int right) {
+  if (left < right) {
+    int p = partition(arr, left, right);
+    quickSort(arr, p + 1, right);
+    quickSort(arr, left, p - 1);
+  }
+}
+
+int main() {
+  int arr[10] = {37, 50, 37, 7, 3, 92, 65, 88, 35, 73};
+
+  cout << "Before sorting: ";
+  cout << "Array: ";
+  for (auto it : arr) {
+    cout << it << " ";
+  }
+  cout << "\n";
+
+  quickSort(arr, 0, 9);
+
+  cout << "Before sorting: ";
+  cout << "Array: ";
+  for (auto it : arr) {
+    cout << it << " ";
+  }
+  cout << "\n";
+}
+#+end_src
+
+#+RESULTS:
+| Before | sorting: | Array: | 37 | 50 | 37 |  7 |  3 | 92 | 65 | 88 | 35 | 73 |
+| Before | sorting: | Array: |  3 |  7 | 35 | 37 | 37 | 50 | 65 | 73 | 88 | 92 |
+
+** Output
+#+begin_example
+$ ./l4p3
+Before sorting: Array: 37 50 37 7 3 92 65 88 35 73
+Before sorting: Array: 3 7 35 37 37 50 65 73 88 92
+#+end_example
+Average case Time Complexity for the following algorithm is O(n \log n)
+Worst case Time Complexity for the following algorithm is O(n^2)
