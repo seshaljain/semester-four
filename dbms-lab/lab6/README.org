@@ -1,0 +1,124 @@
+#+TITLE: DBMS Lab 6
+#+SUBTITLE: Company Database Queries
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: February 22, 2021
+#+EXPORT_FILE_NAME: 191112436
+#+LATEX_CLASS: assignment
+
+* Query 1
+** Retrieve the birth date and address of the employee(s) whose name is =John B. Smith=
+#+begin_src sql
+SELECT Bdate,
+       Address
+FROM EMPLOYEE
+WHERE (Fname = 'John' AND Minit = 'B' AND Lname = 'Smith');
+ #+end_src
+[[./img/fig-1.png]]
+
+* Query 2
+** Retrieve the name and address of all employees who work for the =Research= department
+#+begin_src sql
+SELECT Fname,
+       Minit,
+       Lname,
+       Address
+FROM EMPLOYEE
+WHERE Dno IN (
+    SELECT Dnumber
+    FROM DEPARTMENT
+    WHERE Dname = 'Research');
+#+end_src
+[[./img/fig-2.png]]
+
+* Query 3
+** For every project located in =Stafford=, list the project number, the controlling department number, and the department manager’s last name, address, and birth date
+#+begin_src sql
+SELECT PROJECT.Pnumber,
+       PROJECT.Dnum,
+       EMPLOYEE.Lname,
+       EMPLOYEE.Address,
+       EMPLOYEE.Bdate
+FROM PROJECT,
+     EMPLOYEE,
+     DEPARTMENT
+WHERE PROJECT.Dnum = DEPARTMENT.Dnumber
+  AND EMPLOYEE.Ssn = DEPARTMENT.Mgr_ssn
+  AND Plocation = 'Stafford';
+#+end_src
+[[./img/fig-3.png]]
+
+* Query 4
+** For each employee, retrieve the employee’s first and last name and the first and last name of his or her immediate supervisor
+#+begin_src sql
+SELECT E.Fname,
+       E.Lname,
+       M.Fname,
+       M.Lname
+FROM EMPLOYEE E,
+     EMPLOYEE M
+WHERE E.Super_ssn = M.Ssn;
+#+end_src
+[[./img/fig-4.png]]
+
+* Query 5
+** Retrieve the salary of every employee and all distinct salary value
+#+begin_src sql
+SELECT DISTINCT Salary from EMPLOYEE;
+#+end_src
+[[./img/fig-5.png]]
+
+* Query 6
+** Make a list of all project numbers for projects that involve an employee whose last name is =Smith=, either as a worker or as a manager of the department that controls the project
+#+begin_src sql
+SELECT DISTINCT Pno
+FROM WORKS_ON
+WHERE Essn IN (SELECT E1.Ssn
+               FROM EMPLOYEE E1,
+                    EMPLOYEE E2
+               WHERE E1.Super_ssn = E2.Ssn
+                   AND E1.Lname = 'Smith'
+                  OR E2.Lname = 'Smith');
+#+end_src
+[[./img/fig-6.png]]
+
+* Query 7
+** Retrieve all employees whose address is in =Houston, Texas=
+#+begin_src sql
+SELECT *
+FROM EMPLOYEE
+WHERE Address LIKE '%Houston TX%';
+#+end_src
+[[./img/fig-7.png]]
+
+* Query 8
+** Find all employees who were born in =1960s=
+#+begin_src sql
+SELECT *
+FROM EMPLOYEE
+WHERE Bdate LIKE '%196_%';
+#+end_src
+[[./img/fig-8.png]]
+
+* Query 9
+** Show the resulting salaries if every employee working on the =ProductX= project is given a 10% raise
+#+begin_src sql
+SELECT Salary * 1.1 'Updated Salary'
+FROM EMPLOYEE
+WHERE Ssn IN (SELECT Essn
+              FROM WORKS_ON
+              WHERE Pno IN (SELECT Pnumber
+                            FROM PROJECT
+                            WHERE Pname = 'ProductX'));
+#+end_src
+[[./img/fig-9.png]]
+
+* Query 10
+** Retrieve all employees in department =5= whose salary is between =$30,000= and =$40,000=
+#+begin_src sql
+SELECT *
+FROM EMPLOYEE
+WHERE Dno = 5
+  AND Salary BETWEEN 30000 AND 40000;
+#+end_src
+[[./img/fig-10.png]]
