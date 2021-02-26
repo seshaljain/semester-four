@@ -1,0 +1,152 @@
+#+title: PHP Lab Assignment 3
+#+subtitle: Seshal Jain, Scholar Number 191112436, CSE 3
+#+options: h:2 num:nil toc:nil author:nil
+#+date: February 25, 2021
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+#+EXPORT_FILE_NAME: 191112436
+
+* *Directory structure*
+#+begin_example
+lab6
+`-- index.php
+#+end_example
+
+* Source code
+** Home page =index.php=
+#+begin_src html :tangle index.php
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login Page</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Registration Form</h2>
+    <?php
+    $nameErr = "";
+    $emailErr = "";
+    $phoneErr = "";
+    $ageErr = "";
+    $name = "";
+    $email = "";
+    $phone = "";
+    $age = "";
+
+    $reg_name = "/^[a-z ,.'-]+$/i";
+    $reg_age = "/([23][0-9])|(40)/";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $_POST["phone"] = str_replace(' ', '', $_POST["phone"]);
+
+        if (empty($_POST["name"]))
+            $nameErr = "This is a required field.";
+        else if (preg_match($reg_name, $_POST["name"]))
+            $name = parse_input($_POST["name"]);
+        else
+            $nameErr = "Invalid name, please enter a valid name.";
+
+        if (empty($_POST["email"]))
+            $emailErr = "This is a required field.";
+        else if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))
+            $email = parse_input($_POST["email"]);
+        else
+            $emailErr = "Invalid email, please enter a valid address.";
+
+        if (empty($_POST["phone"]))
+            $phoneErr = "This is a required field.";
+        else if (!preg_match("/^[0-9]*$/", $_POST["phone"]))
+            $phoneErr = "Invalid phone number, please enter a valid phone number.";
+        else if (strlen($_POST["phone"]) != 10)
+            $phoneErr = "Phone number length must be 10";
+        else
+            $phone = "(+91) " . parse_input($_POST["phone"]);
+
+        if (empty($_POST["age"]))
+            $ageErr = "This is a required field.";
+        else if (preg_match("/^[0-9]*$/", $_POST["age"])) {
+            $age = parse_input($_POST["age"]);
+            if (!preg_match($reg_age, $age)) {
+                $ageErr = "Your age must be between 20 and 40.";
+                $age = "";
+            }
+        } else
+            $ageErr = "Invalid age, please enter a valid number between 20 and 40.";
+    }
+
+    function parse_input($data)
+    {
+        return htmlspecialchars(stripslashes(trim($data)));
+    }
+    ?>
+
+    <fieldset>
+        <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+            <label for="name">Name: </label>
+            <input type="text" name="name" id="name" />
+            <br />
+            <small class="error"><?php echo $nameErr; ?></small>
+            <br />
+
+            <label for="email">Email: </label>
+            <input type="email" name="email" id="email" />
+            <br />
+            <small class="error"><?php echo $emailErr; ?></small>
+            <br />
+
+            <label for="phone">Phone: </label>
+            <input type="tel" name="phone" id="phone" />
+            <br />
+            <small class="error"><?php echo $phoneErr; ?></small>
+            <br />
+
+            <label for="age">Age: </label>
+            <input type="number" name="age" id="age" />
+            <br />
+            <small class="error"><?php echo $ageErr; ?></small>
+            <br />
+
+            <input type="submit" name="submit" value="Submit" />
+        </form>
+    </fieldset>
+
+    <div>
+        <h2>Submitted Details</h2>
+        <p>
+            <?php echo "Name: " . $name; ?>
+        </p>
+        <p>
+            <?php echo "Email: " . $email; ?>
+        </p>
+        <p>
+            <?php echo "Phone: " . $phone; ?>
+        </p>
+        <p>
+            <?php echo "Age: " . $age; ?>
+        </p>
+    </div>
+</body>
+
+</html>
+#+end_src
+
+* Images
+** Input
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./img/input.png]]
+** Output
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./img/output.png]]
+** Input with errors
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./img/error-input.png]]
+** Output with error
+#+ATTR_LATEX: :width 0.5\textwidth
+[[./img/error-output.png]]
