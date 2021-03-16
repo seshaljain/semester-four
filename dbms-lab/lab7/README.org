@@ -1,0 +1,161 @@
+#+TITLE: DBMS Lab 7
+#+SUBTITLE: Company Database Queries
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: March 15, 2021
+#+EXPORT_FILE_NAME: 191112436
+#+LATEX_CLASS: assignment
+
+* Query 1
+** Retrieve the names of all employess in department number 5 who work for more than 10 hours/week on =ProductX= project
+#+begin_src sql
+SELECT Fname, Minit, Lname
+FROM EMPLOYEE,
+     WORKS_ON,
+     PROJECT
+WHERE Ssn = Essn
+  AND Pno = Pnumber
+  AND Dno = 5
+  AND Hours >= 10
+  AND Pname = 'ProductX';
+#+end_src
+
+* Query 2
+** List the name of employees who have a dependent with same first name as themselves
+#+begin_src sql
+SELECT Fname, Minit, Lname
+FROM EMPLOYEE
+         JOIN DEPENDENT ON Ssn = Essn
+WHERE Fname = Dependent_name;
+#+end_src
+
+* Query 3
+** Find the name of employees who are directly supervised by =Franklin Wong=
+#+begin_src sql
+SELECT E1.Fname, E1.Minit, E1.Lname
+FROM EMPLOYEE AS E1
+WHERE E1.Super_Ssn IN (SELECT E2.Ssn
+                       FROM EMPLOYEE AS E2
+                       WHERE E2.Fname = 'Franklin'
+                         AND E2.Lname = 'Wong');
+#+end_src
+
+* Query 4
+** For each project, list the project name and total number of hours spent on the project per week
+#+begin_src sql
+SELECT Pname, SUM(hours)
+FROM (PROJECT
+         JOIN WORKS_ON ON Pnumber = Pno)
+GROUP BY Pname;
+#+end_src
+
+* Query 5
+** Retrieve names of all employees who work on every project
+Implement $\div$ operator using relational algebra
+#+begin_src sql
+SELECT Fname,
+       Minit,
+       Lname
+FROM EMPLOYEE
+WHERE NOT EXISTS(
+        SELECT Pnumber
+        FROM PROJECT
+        WHERE NOT EXISTS(
+                SELECT Pno
+                FROM WORKS_ON,
+                     EMPLOYEE
+                WHERE Ssn = Essn
+            )
+    );
+#+end_src
+
+* Query 6
+** Retrieve the name of all employees who do not work on any project
+#+begin_src sql
+SELECT Fname, Minit, Lname
+FROM EMPLOYEE
+WHERE Ssn NOT IN (SELECT DISTINCT Essn FROM WORKS_ON);
+#+end_src
+
+* Query 7
+** Retrive the departments and average salary of employees
+#+begin_src sql
+SELECT Dname, AVG(Salary)
+FROM EMPLOYEE,
+     DEPARTMENT
+WHERE Dno = Dnumber
+GROUP BY Dno;
+#+end_src
+
+* Query 8
+** Find names and addresses of all employees who work on at least one project location in =Houston= but whose department has no location in =Houston=
+#+begin_src sql
+SELECT Fname, Minit, Lname
+FROM EMPLOYEE
+         JOIN WORKS_ON ON Ssn = Essn
+WHERE Pno IN (SELECT Pnumber FROM PROJECT WHERE Plocation = 'Houston')
+  AND Dno NOT IN (SELECT Dnumber FROM DEPT_LOCATIONS WHERE Dlocation = 'Houston');
+#+end_src
+
+* Query 9
+** List the last name of all department managers who have no dependents
+#+begin_src sql
+SELECT Lname
+FROM EMPLOYEE,
+     DEPARTMENT
+WHERE Ssn = Mgr_ssn
+  AND NOT EXISTS(
+        SELECT Dependent_name FROM DEPENDENT WHERE Ssn = Mgr_ssn
+    );
+#+end_src
+
+* Query 10
+** Retrieve department and name of employees for all department whose average employee salary is more than $8000
+#+begin_src sql
+SELECT Dname,
+       COUNT(Ssn)
+FROM EMPLOYEE,
+     DEPARTMENT
+WHERE Dno = Dnumber
+GROUP BY Dname
+HAVING AVG(salary) >= 8000;
+#+end_src
+
+* Query 11
+** Make a list of project numbers for projects that involve an employee whose last name is =Smith= either as a worker or as a manager
+#+begin_src sql
+SELECT DISTINCT Pno
+FROM EMPLOYEE,
+     WORKS_ON
+WHERE Ssn = Essn
+  AND Lname = 'Smith'
+UNION
+SELECT DISTINCT Pnumber
+FROM EMPLOYEE,
+     PROJECT,
+     DEPARTMENT
+WHERe Dno = Dnum
+  AND Mgr_ssn = Ssn
+  AND Lname = 'Smith';
+#+end_src
+
+* Query 12
+** Find the list of employees who work on more than =2= projects
+#+begin_src sql
+SELECT Fname, Minit, Lname
+FROM EMPLOYEE
+WHERE Ssn IN (SELECT Essn
+              FROM WORKS_ON
+              GROUP BY Essn
+              HAVING COUNT(Pno) > 2);
+#+end_src
+
+* Query 13
+** Find the names of employees whose salary is greater than average salary of their department
+#+begin_src sql
+SELECT E1.Fname, E1.Lname
+FROM EMPLOYEE as E1
+WHERE E1.Salary > (SELECT AVG(E2.Salary)
+                   FROM EMPLOYEE AS E2
+                   WHERE E1.Dno = E2.Dno);
+#+end_src
