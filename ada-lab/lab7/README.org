@@ -1,0 +1,148 @@
+#+TITLE: Analysis and Design of Algorithms
+#+SUBTITLE: Lab 7
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: March 17, 2021
+#+LATEX_CLASS: assignment
+#+EXPORT_FILE_NAME: 191112436
+
+* Program 1
+Write a program to implement Dijkstra's algorithm. Find shortest paths from vertex =1= to all other vertices in the following graph
+
+#+begin_src dot :file graph.png
+graph G {
+    graph [layout=sfdp]
+
+    0 -- 1 [label=4]
+    0 -- 7 [label=8]
+    1 -- 7 [label=11]
+    1 -- 2 [label=8]
+    2 -- 8 [label=2]
+    2 -- 3 [label=7]
+    2 -- 5 [label=4]
+    3 -- 4 [label=9]
+    3 -- 5 [label=14]
+    4 -- 5 [label=10]
+    5 -- 6 [label=2]
+    6 -- 7 [label=1]
+    6 -- 8 [label=6]
+    7 -- 8 [label=7]
+}
+#+end_src
+
+#+RESULTS:
+[[file:graph.png]]
+
+#+begin_src cpp :tangle l7p1.cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+#define V 9
+
+class djikstra {
+public:
+  int graph[V][V];
+
+  int dist[V];
+  bool sptSet[V];
+
+  djikstra() {
+    for (int i = 0; i < V; i++) {
+      for (int j = 0; j < V; j++) {
+        graph[i][j] = 0;
+      }
+    }
+
+    for (int i = 0; i < V; i++) {
+      dist[i] = INT_MAX;
+      sptSet[i] = false;
+    }
+  }
+
+  void add_edge(int i, int j, int wt) {
+    graph[i][j] = wt;
+    graph[j][i] = wt;
+  }
+
+  int minDist(int dist[], bool sptSet[]) {
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < V; v++) {
+      if (!sptSet[v] && dist[v] <= min)
+        min = dist[v], min_index = v;
+    }
+
+    return min_index;
+  }
+
+  void findShortestPath(int src) {
+    dist[src] = 0;
+
+    for (int count = 0; count < V - 1; count++) {
+      int u = minDist(dist, sptSet);
+      sptSet[u] = true;
+
+      for (int v = 0; v < V; v++)
+
+        if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX &&
+            dist[u] + graph[u][v] < dist[v])
+          dist[v] = dist[u] + graph[u][v];
+    }
+
+    cout << "Shortest paths from vertex " << src << "\n";
+    cout << "Vertex"
+         << "\t"
+         << "Distance"
+         << "\n";
+
+    for (int i = 1; i < V; i++) {
+      cout << i << "\t" << dist[i] << "\n";
+    }
+  }
+} g;
+
+int main() {
+  g.add_edge(0, 1, 4);
+  g.add_edge(0, 7, 8);
+  g.add_edge(1, 7, 11);
+  g.add_edge(1, 2, 8);
+  g.add_edge(2, 8, 2);
+  g.add_edge(2, 3, 7);
+  g.add_edge(2, 5, 4);
+  g.add_edge(3, 4, 9);
+  g.add_edge(3, 5, 14);
+  g.add_edge(4, 5, 10);
+  g.add_edge(5, 6, 2);
+  g.add_edge(6, 7, 1);
+  g.add_edge(6, 8, 6);
+  g.add_edge(7, 8, 7);
+
+  g.findShortestPath(0);
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+| Shortest |    paths | from | vertex | 0 |
+|   Vertex | Distance |      |        |   |
+|        1 |        4 |      |        |   |
+|        2 |       12 |      |        |   |
+|        3 |       19 |      |        |   |
+|        4 |       21 |      |        |   |
+|        5 |       11 |      |        |   |
+|        6 |        9 |      |        |   |
+|        7 |        8 |      |        |   |
+|        8 |       14 |      |        |   |
+** Output
+#+begin_example
+Shortest paths from vertex 0
+Vertex	Distance
+1	4
+2	12
+3	19
+4	21
+5	11
+6	9
+7	8
+8	14
+#+end_example
