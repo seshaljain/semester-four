@@ -1,0 +1,147 @@
+#+TITLE: Software Engineering Lab
+#+SUBTITLE: CSE-229
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:nil toc:nil
+#+DATE: March 12, 2021
+#+LATEX_CLASS: assignment
+#+EXPORT_FILE_NAME: 191112436
+
+* ATM System
+** Use Case Diagram
+#+begin_src plantuml :file img/atm-use-case.png
+left to right direction
+actor User as user
+actor :ATM Technician: as tech
+actor :Banking System: as bs
+
+package ATM {
+        usecase "Check Balance" as checkBalance
+        usecase "Deposit Funds" as depositFunds
+        usecase "Withdraw Funds" as withdrawFunds
+        usecase "Transfer Funds" as transferFunds
+        usecase Repair as repair
+        usecase Maintain as maintain
+}
+
+user -- checkBalance
+user -- depositFunds
+user -- withdrawFunds
+user -- transferFunds
+
+tech -- repair
+tech -- maintain
+
+checkBalance -- bs
+depositFunds -- bs
+withdrawFunds -- bs
+transferFunds -- bs
+repair -- bs
+maintain -- bs
+#+end_src
+
+#+RESULTS:
+[[file:img/atm-use-case.png]]
+
+* E-Commerce Portal
+** Use Case Diagram
+#+begin_src plantuml :file img/ecommerce-use-case.png
+left to right direction
+
+rectangle User {
+        actor :New User: as newUser
+        actor :Existing User: as existingUser
+}
+
+Authetication as auth << service >>
+"Identity Provider" as id
+"Payment Gateway" as payment
+
+package Portal {
+        together {
+                usecase "Delete Item" as deleteItem
+                usecase "Manage Cart" as manageCart
+                usecase "Edit Item" as editItem
+                usecase "Add Item" as addItem
+        }
+
+
+        usecase "View Item" as viewItem
+        usecase "Make Purchase" as makePurchase
+        usecase "Checkout" as checkout
+
+        together {
+                usecase "Login" as login
+                usecase "Register " as register
+        }
+}
+
+newUser -- register
+newUser -- viewItem
+
+existingUser -- viewItem
+existingUser -- makePurchase
+existingUser -- checkout
+existingUser -- manageCart
+existingUser -- login
+manageCart .> deleteItem
+manageCart .> editItem
+manageCart .> addItem
+
+viewItem .> addItem : << extends >>
+makePurchase .> viewItem : << include >>
+makePurchase .> checkout : << include >>
+
+register -- auth
+login -- auth
+
+viewItem -- id
+makePurchase -- id
+checkout -- id
+
+checkout -- payment
+#+end_src
+
+* Chat Application
+** Use Case Diagram
+#+begin_src plantuml :file img/chat-use-case.png :tangle no
+left to right direction
+actor Local as local
+actor Remote as remote
+
+package Application {
+        usecase Chat as chat
+        usecase "Send Text" as sendText
+        usecase "Send Multimedia" as sendMultimedia
+
+        usecase "Search" as search
+
+        usecase "Create Group" as createGroup
+        usecase "Broadcast Message" as broadcastMessage
+
+        together {
+                usecase "Delete Account" as deleteAccount
+                usecase "Add/Edit Profile Picture" as profilePicture
+                usecase "Notifications" as notifications
+       }
+}
+
+local -- chat
+local -- search
+local -- deleteAccount
+local -- profilePicture
+local -- notifications
+local -- createGroup
+local -- broadcastMessage
+
+chat -- remote
+notifications -- remote
+createGroup -- remote
+broadcastMessage -- remote
+
+chat .> sendText
+chat .> sendMultimedia
+#+end_src
+
+#+ATTR_LATEX: :width .7\textwidth
+#+RESULTS:
+[[file:img/chat-use-case.png]]
