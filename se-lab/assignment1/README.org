@@ -1,0 +1,658 @@
+#+TITLE: Software Engineering Lab
+#+SUBTITLE: CSE-229
+#+AUTHOR: Seshal Jain
+#+OPTIONS: num:2
+#+DATE: April 6, 2021
+#+LATEX_CLASS: assignment
+#+EXPORT_FILE_NAME: 191112436
+
+* Software Requirement Specification for 3 Word URL
+** Introduction
+Three Word URL generates short and easy to read URLs to share on the go, with the option to choose the lifetime of the URL while generating it.
+** Description/Overview
+The software provides a platform for the user to generate URLs for sharing. The generated URLs are in the form of website routes made from 3 easy to remember English words, which redirect the user to the original website. The words used can be shared verbally, and thus are easier to remember. The project has the added advantage of having an easy way to shorten complicated URLs temporarily, this is extremely useful for teams for sharing resources at short notice.
+** Clients:
+Individuals or Development teams working on projects who need to share URLs.
+** Feasibility
+*** Technical Feasibility
+Possible frameworks that can be used
+1. Python based Django
+2. Python based Flask
+3. Node.js based ExpressJS
+Based on the developer availability, our best option is to go with Python based Django.
+*** Operational Feasibility
+After the deployment of the project on the server, no maintenance is required for the project.
+There may be some downtime when the server on which the project is running goes down.
+*** Economic Feasibility
+The major costs associated with this project after development are the hosting and maintenance costs.
+The capital required for covering costs of hosting may be generated from showing non-intrusive advertisements on the redirection page.
+** Requirements
+*** Functional Requirements
+1. The ability to generate short urls that are easy to read.
+2. Proper redirection, with minimum to no downtime.
+3. Fast response and redirection.
+4. Ability to handle non-existing and invalid urls.
+*** Non Functional Requirements
+1. Security - The data shouldn’t be easily breached and data shouldn’t be corrupted and url lifetime scope shouldn’t be able to be changed by unauthorized people.
+2. Maintenance - The project itself doesn’t require management after the deployment, however the server may require regular maintenance.
+** Goals and Scopes
+1. Users should be able to generate a 3-word-URL for the required links.
+2. Users should have the option to choose the validity duration for the generated URL.
+3. Users must be able to generate URLs for even non existent websites.
+** Developer Responsibility
+The developer team will take the responsibility of the project.
+** Platform
+1. Website
+2. Progressive Web App for installation on phone
+** Deliverables
+The development team will deliver the following after the course of development:
+1. Feature Specification
+2. Test Plan for the project
+3. Product design and structure
+4. A thorough report of the project
+5. Source Code
+** Risk Management: (Identification and Mitigation)
+1. In case of database failure, the URLs and routes may be lost.
+2. This can be resolved via timed backups and regular DBMS checkups.
+
+* Types of SRS Diagrams
+** Use Case Diagram
+Use case Diagrams (or behaviour diagrams) describe the set of operations that
+some system can perform in collaboration with one or more external users of the
+system. The use case diagram may be used to gather system requirements or get an
+overview of a system.It identifies the external and internal factors that
+influence the system and also shows the interaction among the requirements.
+** ER Diagram
+Entity-relationship model is used to describe interrelated things of interest in
+a particular topic. A basic ER model is composed of entity types and specifies
+relationships that can exist between entities. We draw ER diagrams to visualize
+database design ideas etc. By drawing ER diagrams to visualize database design
+ideas, we can identify the mistakes and design flaws, and make corrections
+before executing the changes in the data.
+** Data Flow Diagram
+DFD is a way of representing the flow of data through a process and the inputs
+and outputs of each entity of the process. It consists of processes, flows,
+warehouses, and terminators. The process part of a system that transforms
+inputs to outputs. The flow shows the transfer of information from one part of
+the system to another. The warehouse is used to store data for later use. The
+terminator is an external entity that communicates with the system and stands
+outside of the system.
+** Activity Diagram
+Activity diagrams are graphical representations of workflows of stepwise
+activities and actions, showing choices for organizational processes. They are a
+form of structured flowchart combined with a traditional data flow diagram.
+** Sequence Diagram
+Sequence diagrams are interaction diagrams and depict how the operations are
+carried out. These diagrams are time focused since they describe the order of
+interaction by using the vertical axis.The vertical axis represents the time at
+which the messages may be sent or received.
+
+* UML Diagrams for ATM System
+** Use Case Diagram
+#+begin_src plantuml :file img/atm-use-case.png
+left to right direction
+actor User as user
+actor :ATM Technician: as tech
+actor :Banking System: as bs
+
+package ATM {
+    usecase "Check Balance" as checkBalance
+    usecase "Deposit Funds" as depositFunds
+    usecase "Withdraw Funds" as withdrawFunds
+    usecase "Transfer Funds" as transferFunds
+    usecase Repair as repair
+    usecase Maintain as maintain
+}
+
+user -- checkBalance
+user -- depositFunds
+user -- withdrawFunds
+user -- transferFunds
+
+repair -- tech
+maintain-- tech
+
+checkBalance -- bs
+depositFunds -- bs
+withdrawFunds -- bs
+transferFunds -- bs
+repair -- bs
+maintain -- bs
+#+end_src
+
+#+RESULTS:
+[[file:img/atm-use-case.png]]
+** Class Diagram
+#+begin_src plantuml :file img/atm-class.png
+class Bank {
+    +address
+    +branchCode
+    ---
+    +manages()
+    +maintains()
+}
+
+class ATM {
+    +location
+    +balance
+    ---
+    +identifies()
+    +transactions()
+}
+
+class Customer {
+    +name
+    -address
+    -DoB
+    ---
+    +owns()
+}
+
+class ATMCard {
+    +cardNo
+    -ownerName
+    -transactionHistory
+    ---
+    +access()
+}
+
+class Account {
+    +type
+    -balance
+    +owner
+    ---
+    checkBalance()
+}
+
+class Transaction {
+    +transactionID
+    +date
+    +transactionType
+    ---
+    +updateBalance()
+}
+
+class "ATM Technician" {
+    +name
+    +branchName
+    ---
+    +availability()
+}
+
+Bank -- ATM
+Bank -- ATMCard
+Bank -- Customer
+Bank -- "ATM Technician"
+
+ATM -- Transaction
+ATM -- ATMCard
+Account -- Transaction
+
+"ATM Technician" -- ATM
+
+Customer -- ATMCard
+Customer -- Account
+#+end_src
+
+#+RESULTS:
+[[file:img/atm-class.png]]
+** Sequence Diagram
+#+begin_src plantuml :file img/atm-sequence.png
+actor Customer as C
+participant ATM
+participant Server as S
+participant Account as A
+
+C -> ATM : Insert Card
+ATM -> S : Verify Card
+alt Valid card
+    S --> ATM : Card OK
+    ATM -> C : Request Pin
+else
+    S --> ATM : Card Invalid
+    ATM -> C : Eject Card
+end
+
+C --> ATM : Pin Entered
+ATM -> S : Verify PIN
+alt Valid pin
+    S --> ATM : Pin OK
+    ATM -> C : Enter amount
+else
+    S --> ATM : Pin Invalid
+    ATM -> C : Eject Card
+end
+
+C --> ATM : Amount Entered
+ATM -> S : Start Transaction
+S -> A : Check Funds
+alt Sufficient funds
+    A --> S : Funds OK
+    S -> A : Withdraw Amount
+    A --> S : Withdraw Success
+    S --> ATM : Transaction Successful
+    ATM -> C : Dispense Cash
+else
+    A --> S: Insufficient Funds
+    S --> ATM : Transaction Failed
+end
+ATM -> C : Eject Card
+#+end_src
+
+#+RESULTS:
+[[file:img/atm-sequence.png]]
+** State Diagram
+#+begin_src plantuml :file img/atm-state.png
+left to right direction
+state "Reading Card" as R
+state "Reading PIN" as P
+state "Choosing Transaction" as CT
+state "Performing Transaction" as PT
+state "Ejecting Card" as E
+
+[*] -> R
+R --> E : invalid
+R -> P : read successfully
+
+P --> E : cancelled
+P -> CT : valid PIN
+
+CT --> E : cancelled
+CT -> PT : transaction chosen
+
+PT --> E : done
+PT -> [*] : crash
+
+E -> [*] : completed
+#+end_src
+** Activity Diagram
+[[./img/atm-activity.png]]
+
+* UML Diagrams for Ecommerce System
+** Use Case Diagram
+#+begin_src plantuml :file img/ecommerce-use-case.png
+left to right direction
+actor User
+actor :New User: as newUser
+actor :Existing User: as existingUser
+
+User --|> newUser
+User --|> existingUser
+
+Authetication as auth << service >>
+"Identity Provider" as id
+"Payment Gateway" as payment
+
+package Portal {
+    usecase "Delete Item" as deleteItem
+    usecase "Add Item" as addItem
+
+
+    usecase "View Item" as viewItem
+    usecase "Checkout" as checkout
+
+    together {
+        usecase "Login" as login
+        usecase "Register" as register
+    }
+}
+
+newUser -- register
+newUser -- viewItem
+
+existingUser -- viewItem
+existingUser -- addItem
+existingUser -- login
+
+addItem .> deleteItem : << extend >>
+addItem .> viewItem : << extend >>
+checkout .> addItem : << include >>
+
+register -- auth
+login -- auth
+
+viewItem -- id
+checkout -- id
+
+checkout -- payment
+#+end_src
+
+
+** Class Diagram
+#+begin_src plantuml :file img/ecommerce-class.png
+class Cart {
+    +owner
+    +items
+    +history
+    ---
+    +addProduct()
+    +removeProduct()
+    +sendToWishlist()
+}
+
+class User {
+    +name
+    +address
+    +phone
+    +history
+    +password
+    ---
+    +addToCart()
+    +removeFromCart()
+    +makePayment()
+    +addReview()
+}
+
+class Portal {
+    +products
+    -activeUsers
+    ---
+    +authenticate()
+    +transferPayment()
+    +initiateDelivery()
+}
+
+class Product {
+    +name
+    +price
+    +sellCount
+    +sellerID
+    +available
+    +reviews
+    ---
+    +checkInventory()
+    -saleHistory()
+}
+
+class Seller {
+    +name
+    +address
+    +rating
+    ---
+    +receivePayment()
+    +addItems()
+    +updateInventory()
+    +respondToReview()
+}
+
+Cart - User
+User -- Portal
+
+
+Seller -- Portal
+Seller -- Product
+
+Portal -- Cart
+Portal -- Product
+Product -- Cart
+#+end_src
+
+#+RESULTS:
+[[file:img/ecommerce-class.png]]
+** Sequence Diagram
+#+begin_src plantuml :file img/ecommerce-sequence.png
+actor Customer as C
+participant "Browse Interface" as B
+database ItemDB as D
+participant Cart
+participant "Purchase Interface" as P
+participant Bank
+
+
+C -> B : Login
+B -> D : Query Products
+D --> B : Return products
+B -> C : Show catalog
+
+C -> Cart : Add/Edit items
+Cart --> D : Query availibility/price
+D -> Cart : Update cart
+Cart -> B : Show updated cart
+
+B -> P : Checkout
+P -> Bank : Initiate payment
+Bank --> B : Purchase successful
+
+B -> C : Show delivery information
+#+end_src
+
+#+RESULTS:
+[[file:img/ecommerce-sequence.png]]
+
+** State Diagram
+#+begin_src plantuml :file img/ecommerce-state.png
+state "View products" as view
+state "Select product" as select
+state "Add to cart" as cart
+state Checkout
+state "Make payment" as payment
+
+[*] -> view
+view -> select : if interested
+select --> cart
+cart -> view : if adding more products
+cart -> Checkout
+Checkout -> payment
+payment -> [*] : success
+payment --> Checkout : failure
+
+
+#+end_src
+
+#+RESULTS:
+[[file:img/ecommerce-state.png]]
+
+** Activity Diagram
+[[./img/ecommerce-activity.png]]
+
+* UML Diagrams for Chat Application
+** Use Case Diagram
+#+begin_src plantuml :file img/chat-use-case.png
+left to right direction
+actor Local as local
+actor Remote as remote
+
+package Application {
+    usecase Chat as chat
+    usecase "Send Text" as sendText
+    usecase "Send Multimedia" as sendMultimedia
+
+    usecase "Search" as search
+
+    usecase "Create Group" as createGroup
+    usecase "Broadcast Message" as broadcastMessage
+
+    together {
+        usecase "Delete Account" as deleteAccount
+        usecase "Add/Edit Profile Picture" as profilePicture
+        usecase "Notifications" as notifications
+    }
+}
+
+local -- chat
+local -- search
+local -- deleteAccount
+local -- profilePicture
+local -- notifications
+local -- createGroup
+local -- broadcastMessage
+
+chat -- remote
+notifications -- remote
+createGroup -- remote
+broadcastMessage -- remote
+
+chat .-> sendText : << include >>
+sendMultimedia .> chat : << extend >>
+#+end_src
+
+#+ATTR_LATEX: :width .7\textwidth
+#+RESULTS:
+[[file:img/chat-use-case.png]]
+
+** Class Diagram
+#+begin_src plantuml :file img/chat-class.png
+class User {
+    -id
+    +phone
+    +name
+    +status
+    ---
+    +updateStatus()
+    +sendMessage()
+    +addContact()
+}
+
+class Chat {
+    -members
+    ---
+    +deleteChat()
+    +exportChat()
+}
+
+class Message {
+    -sender
+    +sendTime
+    +receiveTime
+    +seenTime
+    +text
+    +media
+    ---
+    +sendMessage()
+    +deleteMessage()
+    +forwardMessage()
+}
+
+class Status {
+    -id
+    +media
+    +text
+    +uploadTime
+    -visibility
+    ---
+    +deleteStatus()
+    -addStatus()
+}
+
+class Server {
+    +activeUsers
+    +incomingMessages
+    +outgoingMessages
+    ---
+    +syncMessages()
+}
+
+Chat <-- User
+User }-> Server
+User -{ Status
+Chat .{ Message
+Message }-> Server
+Status }-> Server
+#+end_src
+
+#+RESULTS:
+[[file:img/chat-class.png]]
+** Sequence Diagram
+#+begin_src plantuml :file img/chat-sequence.png
+actor User
+participant Message
+participant Contacts
+database ContactDB
+participant History
+
+History -> History : Search message
+User -> Message : Open message
+Message -> History : Open chat
+Message -> Contacts : Open contact
+Contacts -> ContactDB : Get contact
+ContactDB --> Contacts : Return contact
+
+loop
+    User -> Message : Compose message
+    Message -> Message : Send message
+    Message -> Message : Receive message
+end
+
+Message -> History : Commit to history
+User -> Message : Abort message
+
+destroy Message
+#+end_src
+
+#+RESULTS:
+[[file:img/chat-sequence.png]]
+
+** State Diagram
+#+begin_src plantuml :file img/chat-state.png
+state "View chats" as chats
+state "Select action" as a <<fork>>
+state "New message" as send
+state c1 <<choice>>
+state Media
+state Text
+state Voice
+state "Read message" as receive
+
+
+[*] -> chats
+chats -> a
+a --> send
+a --> receive
+
+receive -> send
+send -> c1
+c1 --> Media
+c1 --> Text
+c1 --> Voice
+
+state "Write message" as write
+state "Record message" as record
+
+Voice --> record
+
+Text --> write
+
+state c2 <<choice>>
+state "Capture photo" as capture
+state "Choose from gallery" as gallery
+
+Media --> c2
+c2 --> capture
+c2 --> gallery
+
+state j <<join>>
+
+gallery --> j
+capture --> j
+record --> j
+write --> j
+
+state "Send message" as sendMsg
+
+j --> sendMsg
+sendMsg --> chats
+#+end_src
+
+#+RESULTS:
+[[file:img/chat-state.png]]
+
+** Activity Diagram
+[[./img/chat-activity.png]]
+
+* Social Networking Website
+Construct an activity diagram for the following modules for a Social Networking Website:
+
+1. Friend Request Module
+2. Messenger Module
+3. Friend Search Module
+4. Post Activity Module
+5. Share Activity Module
+
+[[./img/SN.png]]
+
+* Philosopher's Table
+Construct an activity diagram for the following scenario:
+
+There are 5 philosophers and 5 forks around a circular table. Each philosopher has access to 2 forks, one on either side. Each fork is shared by 2 philosophers. Each fork may be either on the table or in use by one philosopher. A philosopher must have 2 forks to eat.
+
+[[./img/dining.png]]

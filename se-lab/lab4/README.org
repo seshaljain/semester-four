@@ -71,7 +71,7 @@ package Portal {
 
         together {
                 usecase "Login" as login
-                usecase "Register " as register
+                usecase "Register" as register
         }
 }
 
