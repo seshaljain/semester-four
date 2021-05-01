@@ -15,7 +15,7 @@ src
 #+end_example
 
 =index.php=
-#+BEGIN_SRC html
+#+BEGIN_SRC html :tangle index.php
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +38,7 @@ src
 #+END_SRC
 
 =formHandler.php=
-#+BEGIN_SRC html
+#+BEGIN_SRC html :tangle formHandler.php
 <!DOCTYPE html>
 <html lang="en">
 <head>
